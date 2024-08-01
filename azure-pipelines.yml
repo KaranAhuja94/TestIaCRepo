@@ -23,5 +23,5 @@ steps:
     medium: '1'
     failByLowStatus: true
     low: '1'
-    IacService: 'USPod01-IaCServiceConnection'
+    IacService: 'EUPod02-IaCServiceConnection'
   displayName: 'Qualys IaC Security Scan'
