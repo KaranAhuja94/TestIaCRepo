@@ -113,7 +113,7 @@
               "Service"
           ],
           "metadata": {
-              "description": "Optional. The keyType to use with Queue and Table services."
+              "description": "Optional. The keyType to use with Queue & Table services."
           }
       },
       "requireInfrastructureEncryption": {
