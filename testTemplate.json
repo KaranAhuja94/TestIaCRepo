@@ -1,5 +1,6 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "languageVersion": "2.0",
     "contentVersion": "1.0.0.0",
     "metadata": {
       "_generator": {
@@ -10,6 +11,40 @@
       "name": "Storage Accounts",
       "description": "This module deploys a Storage Account.",
       "owner": "Azure/module-maintainers"
+    },
+    "definitions": {
+      "customerManagedKeyType": {
+          "type": "object",
+          "properties": {
+              "keyVaultResourceId": {
+                  "type": "string",
+                  "metadata": {
+                      "description": "Required. The resource ID of a key vault to reference a customer managed key for encryption from."
+                  }
+              },
+              "keyName": {
+                  "type": "string",
+                  "metadata": {
+                      "description": "Required. The name of the customer managed key to use for encryption."
+                  }
+              },
+              "keyVersion": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                      "description": "Optional. The version of the customer managed key to reference for encryption. If not provided, using 'latest'."
+                  }
+              },
+              "userAssignedIdentityResourceId": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                      "description": "Optional. User assigned identity to use when fetching the customer managed key. If used must also be specified in `managedIdentities.userAssignedResourceIds`. Required if no system assigned identity is available for use."
+                  }
+              }
+          },
+          "nullable": true
+      }  
     },
     "parameters": {
       "name": {
