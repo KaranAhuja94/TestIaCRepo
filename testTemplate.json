@@ -6,12 +6,12 @@
         "name": "bicep",
         "version": "0.30.23.60470",
         "templateHash": "7109049210516898074"
-      }
+      },
       "name": "Storage Accounts",
       "description": "This module deploys a Storage Account.",
       "owner": "Azure/module-maintainers"
     },
-    "parameters": [
+    "parameters": {
       "name": {
         "type": "string",
         "maxLength": 24,
@@ -64,11 +64,11 @@
           "description": "Optional. Allow HTTPS traffic only to storage service if sets to true."
         }
       }
-    ],
+    },
     "resources": [
         {
           "type": "Microsoft.Storage/storageAccounts",
-          "apiVersion": "2023-05-01",
+          "apiVersion": "2023-04-01",
           "name": "[parameters('name')]",
           "location": "[parameters('location')]",
           "kind": "[parameters('kind')]",
