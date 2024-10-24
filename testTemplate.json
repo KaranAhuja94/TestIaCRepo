@@ -14,37 +14,37 @@
     },
     "definitions": {
       "customerManagedKeyType": {
-          "type": "object",
-          "properties": {
-              "keyVaultResourceId": {
-                  "type": "string",
-                  "metadata": {
-                      "description": "Required. The resource ID of a key vault to reference a customer managed key for encryption from."
-                  }
-              },
-              "keyName": {
-                  "type": "string",
-                  "metadata": {
-                      "description": "Required. The name of the customer managed key to use for encryption."
-                  }
-              },
-              "keyVersion": {
-                  "type": "string",
-                  "nullable": true,
-                  "metadata": {
-                      "description": "Optional. The version of the customer managed key to reference for encryption. If not provided, using 'latest'."
-                  }
-              },
-              "userAssignedIdentityResourceId": {
-                  "type": "string",
-                  "nullable": true,
-                  "metadata": {
-                      "description": "Optional. User assigned identity to use when fetching the customer managed key. If used must also be specified in `managedIdentities.userAssignedResourceIds`. Required if no system assigned identity is available for use."
-                  }
-              }
+        "type": "object",
+        "properties": {
+          "keyVaultResourceId": {
+            "type": "string",
+            "metadata": {
+              "description": "Required. The resource ID of a key vault to reference a customer managed key for encryption from."
+            }
           },
-          "nullable": true
-      }  
+          "keyName": {
+            "type": "string",
+            "metadata": {
+              "description": "Required. The name of the customer managed key to use for encryption."
+            }
+          },
+          "keyVersion": {
+            "type": "string",
+            "nullable": true,
+            "metadata": {
+              "description": "Optional. The version of the customer managed key to reference for encryption. If not provided, using 'latest'."
+            }
+          },
+          "userAssignedIdentityResourceId": {
+            "type": "string",
+            "nullable": true,
+            "metadata": {
+              "description": "Optional. User assigned identity to use when fetching the customer managed key. If used must also be specified in `managedIdentities.userAssignedResourceIds`. Required if no system assigned identity is available for use."
+            }
+          }
+        },
+        "nullable": true
+      }
     },
     "parameters": {
       "name": {
@@ -100,70 +100,70 @@
         }
       },
       "customerManagedKey": {
-          "$ref": "#/definitions/customerManagedKeyType",
-          "metadata": {
-              "description": "Optional. The customer managed key definition."
-          }
+        "$ref": "#/definitions/customerManagedKeyType",
+        "metadata": {
+          "description": "Optional. The customer managed key definition."
+        }
       },
       "keyType": {
-          "type": "string",
-          "nullable": true,
-          "allowedValues": [
-              "Account",
-              "Service"
-          ],
-          "metadata": {
-              "description": "Optional. The keyType to use with Queue & Table services."
-          }
+        "type": "string",
+        "nullable": true,
+        "allowedValues": [
+          "Account",
+          "Service"
+        ],
+        "metadata": {
+          "description": "Optional. The keyType to use with Queue & Table services."
+        }
       },
       "requireInfrastructureEncryption": {
-          "type": "bool",
-          "defaultValue": true,
-          "metadata": {
-              "description": "Optional. A Boolean indicating whether or not the service applies a secondary layer of encryption with platform managed keys for data at rest. For security reasons, it is recommended to set it to true."
-          }
+        "type": "bool",
+        "defaultValue": true,
+        "metadata": {
+          "description": "Optional. A Boolean indicating whether or not the service applies a secondary layer of encryption with platform managed keys for data at rest. For security reasons, it is recommended to set it to true."
+        }
       }
     },
     "resources": {
-        "cMKKeyVault::cMKKey": {
-            "condition": "[and(not(empty(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'))), and(not(empty(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'))), not(empty(tryGet(parameters('customerManagedKey'), 'keyName')))))]",
-            "existing": true,
-            "type": "Microsoft.KeyVault/vaults/keys",
-            "apiVersion": "2023-02-01",
-            "subscriptionId": "[split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), '//'), '/')[2]]",
-            "resourceGroup": "[split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), '////'), '/')[4]]",
-            "name": "[format('{0}/{1}', last(split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), 'dummyVault'), '/')), coalesce(tryGet(parameters('customerManagedKey'), 'keyName'), 'dummyKey'))]",
-            "dependsOn": [
-                "cMKKeyVault"
-            ]
+      "cMKKeyVault::cMKKey": {
+        "condition": "[and(not(empty(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'))), and(not(empty(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'))), not(empty(tryGet(parameters('customerManagedKey'), 'keyName')))))]",
+        "existing": true,
+        "type": "Microsoft.KeyVault/vaults/keys",
+        "apiVersion": "2023-02-01",
+        "subscriptionId": "[split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), '//'), '/')[2]]",
+        "resourceGroup": "[split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), '////'), '/')[4]]",
+        "name": "[format('{0}/{1}', last(split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), 'dummyVault'), '/')), coalesce(tryGet(parameters('customerManagedKey'), 'keyName'), 'dummyKey'))]",
+        "dependsOn": [
+          "cMKKeyVault"
+        ]
+      },
+      "cMKKeyVault": {
+        "condition": "[not(empty(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId')))]",
+        "existing": true,
+        "type": "Microsoft.KeyVault/vaults",
+        "apiVersion": "2023-02-01",
+        "subscriptionId": "[split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), '//'), '/')[2]]",
+        "resourceGroup": "[split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), '////'), '/')[4]]",
+        "name": "[last(split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), 'dummyVault'), '/'))]"
+      },
+      "storageAccount": {
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "2023-04-01",
+        "name": "[parameters('name')]",
+        "location": "[parameters('location')]",
+        "kind": "[parameters('kind')]",
+        "sku": {
+          "name": "[parameters('skuName')]"
         },
-        "cMKKeyVault": {
-            "condition": "[not(empty(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId')))]",
-            "existing": true,
-            "type": "Microsoft.KeyVault/vaults",
-            "apiVersion": "2023-02-01",
-            "subscriptionId": "[split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), '//'), '/')[2]]",
-            "resourceGroup": "[split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), '////'), '/')[4]]",
-            "name": "[last(split(coalesce(tryGet(parameters('customerManagedKey'), 'keyVaultResourceId'), 'dummyVault'), '/'))]"
+        "properties": {
+          "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]",
+          "encryption": "[union(createObject('keySource', if(not(empty(parameters('customerManagedKey'))), 'Microsoft.Keyvault', 'Microsoft.Storage'), 'services', createObject('blob', if(variables('supportsBlobService'), createObject('enabled', true()), null()), 'file', if(variables('supportsFileService'), createObject('enabled', true()), null()), 'table', createObject('enabled', true(), 'keyType', parameters('keyType')), 'queue', createObject('enabled', true(), 'keyType', parameters('keyType'))), 'keyvaultproperties', if(not(empty(parameters('customerManagedKey'))), createObject('keyname', parameters('customerManagedKey').keyName, 'keyvaulturi', reference('cMKKeyVault').vaultUri, 'keyversion', if(not(empty(coalesce(tryGet(parameters('customerManagedKey'), 'keyVersion'), ''))), parameters('customerManagedKey').keyVersion, last(split(reference('cMKKeyVault::cMKKey').keyUriWithVersion, '/')))), null()), 'identity', createObject('userAssignedIdentity', if(not(empty(tryGet(parameters('customerManagedKey'), 'userAssignedIdentityResourceId'))), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', split(coalesce(tryGet(parameters('customerManagedKey'), 'userAssignedIdentityResourceId'), '//'), '/')[2], split(coalesce(tryGet(parameters('customerManagedKey'), 'userAssignedIdentityResourceId'), '////'), '/')[4]), 'Microsoft.ManagedIdentity/userAssignedIdentities', last(split(coalesce(tryGet(parameters('customerManagedKey'), 'userAssignedIdentityResourceId'), 'dummyMsi'), '/'))), null()))), if(parameters('requireInfrastructureEncryption'), createObject('requireInfrastructureEncryption', if(not(equals(parameters('kind'), 'Storage')), parameters('requireInfrastructureEncryption'), null())), createObject()))]"
         },
-        "storageAccount": {
-          "type": "Microsoft.Storage/storageAccounts",
-          "apiVersion": "2023-04-01",
-          "name": "[parameters('name')]",
-          "location": "[parameters('location')]",
-          "kind": "[parameters('kind')]",
-          "sku": {
-            "name": "[parameters('skuName')]"
-          },
-          "properties": {
-            "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]",
-            "encryption": "[union(createObject('keySource', if(not(empty(parameters('customerManagedKey'))), 'Microsoft.Keyvault', 'Microsoft.Storage'), 'services', createObject('blob', if(variables('supportsBlobService'), createObject('enabled', true()), null()), 'file', if(variables('supportsFileService'), createObject('enabled', true()), null()), 'table', createObject('enabled', true(), 'keyType', parameters('keyType')), 'queue', createObject('enabled', true(), 'keyType', parameters('keyType'))), 'keyvaultproperties', if(not(empty(parameters('customerManagedKey'))), createObject('keyname', parameters('customerManagedKey').keyName, 'keyvaulturi', reference('cMKKeyVault').vaultUri, 'keyversion', if(not(empty(coalesce(tryGet(parameters('customerManagedKey'), 'keyVersion'), ''))), parameters('customerManagedKey').keyVersion, last(split(reference('cMKKeyVault::cMKKey').keyUriWithVersion, '/')))), null()), 'identity', createObject('userAssignedIdentity', if(not(empty(tryGet(parameters('customerManagedKey'), 'userAssignedIdentityResourceId'))), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', split(coalesce(tryGet(parameters('customerManagedKey'), 'userAssignedIdentityResourceId'), '//'), '/')[2], split(coalesce(tryGet(parameters('customerManagedKey'), 'userAssignedIdentityResourceId'), '////'), '/')[4]), 'Microsoft.ManagedIdentity/userAssignedIdentities', last(split(coalesce(tryGet(parameters('customerManagedKey'), 'userAssignedIdentityResourceId'), 'dummyMsi'), '/'))), null()))), if(parameters('requireInfrastructureEncryption'), createObject('requireInfrastructureEncryption', if(not(equals(parameters('kind'), 'Storage')), parameters('requireInfrastructureEncryption'), null())), createObject()))]"
-          },
-          "dependsOn": [
-              "cMKKeyVault"
-          ]
-        }
-     },
+        "dependsOn": [
+          "cMKKeyVault"
+        ]
+      }
+    },
     "variables": {
       "supportsBlobService": "[or(or(or(equals(parameters('kind'), 'BlockBlobStorage'), equals(parameters('kind'), 'BlobStorage')), equals(parameters('kind'), 'StorageV2')), equals(parameters('kind'), 'Storage'))]",
       "supportsFileService": "[or(or(equals(parameters('kind'), 'FileStorage'), equals(parameters('kind'), 'StorageV2')), equals(parameters('kind'), 'Storage'))]"
