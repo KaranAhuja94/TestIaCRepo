@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "languageVersion": "2.0",
     "contentVersion": "1.0.0.0",
-    "metadata" {
+    "metadata": {
       "_generator": {
         "name": "bicep",
         "version": "0.30.23.60470",
