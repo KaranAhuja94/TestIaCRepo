@@ -16,12 +16,12 @@ steps:
 - task: QualysIaCSecurityConnector@2
   inputs:
     failByCriticalStatus: true
-    critical: '1'
+    critical: '2'
     failByHighStatus: true
-    high: '1'
+    high: '2'
     failByMediumStatus: true
-    medium: '1'
+    medium: '2'
     failByLowStatus: true
-    low: '1'
+    low: '2'
     IacService: 'EUPod02-IaCServiceConnection'
   displayName: 'Qualys IaC Security Scan'
