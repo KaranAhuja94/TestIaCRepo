@@ -65,6 +65,17 @@
             "metadata": {
                 "description": "Optional. Specifies whether data in the container may be accessed publicly and the level of access."
             }
+        },
+        "networkAclDefaultAction": {
+            "type": "string",
+            "defaultValue":"None",
+            "allowedValues": [
+                "Allow",
+                "Deny"
+            ],
+            "metadata": {
+                "description": "Required. Specifies the default action of allow or deny when no other rules match."
+            }
         }
     },
     "functions": [],
@@ -80,7 +91,10 @@
                 "name": "[parameters('skuName')]"
             },
             "properties": {
-                "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]"
+                "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]",
+                "networkAcls": {
+                    "defaultAction": "[parameters('networkAclDefaultAction')]"
+                }
             }
         },
         {
