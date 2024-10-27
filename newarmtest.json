@@ -68,7 +68,7 @@
         },
         "networkAclDefaultAction": {
             "type": "string",
-            "defaultValue":"None",
+            "defaultValue":"Deny",
             "allowedValues": [
                 "Allow",
                 "Deny"
