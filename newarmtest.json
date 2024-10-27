@@ -53,6 +53,18 @@
             "metadata": {
                 "description": "Optional. Allows HTTPS traffic only to storage service if sets to true."
             }
+        },
+        "publicAccess": {
+            "type": "string",
+            "defaultValue": "None",
+            "allowedValues": [
+                "Container",
+                "Blob",
+                "None"
+            ],
+            "metadata": {
+                "description": "Optional. Specifies whether data in the container may be accessed publicly and the level of access."
+            }
         }
     },
     "functions": [],
@@ -69,6 +81,14 @@
             },
             "properties": {
                 "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]"
+            }
+        },
+        {
+            "type":"Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2023-04-01",
+            "name": "[format('{0}-Storage-BlobServices', uniqueString(deployment().name, parameters('location')))]",
+            "properties": {
+                "publicAccess": "[parameters('publicAccess')]"
             }
         }
     ],
