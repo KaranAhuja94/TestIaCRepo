@@ -2,13 +2,13 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.0"
+      version = "~>3.0"
     }
   }
 }
 
 provider "azurerm" {
-  subscription_id = "1d767489-da0c-4948-a285-bf2c708c0586"
+  subscription_id = var.subscription_id
   features {
   }
 }
@@ -22,7 +22,8 @@ resource "azurerm_storage_account" "storage-account-test" {
   account_tier             = "Standard"
   account_replication_type = "GRS"
   # 50011
-  https_traffic_only_enabled = true
+  #https_traffic_only_enabled = true
+  enable_https_traffic_only = true
   tags = {
     createdBy = "Karan"
     purpose   = "IaC testing"
@@ -53,7 +54,7 @@ resource "azurerm_private_endpoint" "stroage-account-private-endpoint" {
     is_manual_connection = false
     # 50313
     private_connection_resource_id = azurerm_storage_account.storage-account-test.id
-    subresource_names = [ "blob" ]
+    subresource_names              = ["blob"]
   }
 }
 
@@ -79,3 +80,22 @@ resource "azurerm_monitor_diagnostic_setting" "monitor-diagnostic-setting" {
     category = "AuditEvent"
   }
 }
+
+resource "azurerm_monitor_diagnostic_setting" "test-diagnostic-setting" {
+  name               = "cid50142test"
+  target_resource_id = "/subscriptions/${var.subscription_id}"
+  storage_account_id = azurerm_storage_account.storage-account-test.id
+  # 50142
+  dynamic "enabled_log" {
+    for_each = toset([
+      "Administrative",
+      "Security",
+      "Alert",
+      "Policy"
+    ])
+    content {
+      category = enabled_log.value
+    }
+  }
+}
+
