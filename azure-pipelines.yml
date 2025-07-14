@@ -14,17 +14,24 @@ steps:
   displayName: 'Run a multi-line script'
 
 - task: PowerShell@2
-  displayName: 'Extract Terraform ZIP to current dir'
+  displayName: 'Extract All ZIPs to Current Directory'
   inputs:
     targetType: 'inline'
     script: |
       $destinationPath = "$(Build.SourcesDirectory)"
-      $zipFilePath = Join-Path $destinationPath "terraform_10mb.zip"
 
+      # Load .NET Zip extraction library
       Add-Type -AssemblyName System.IO.Compression.FileSystem
-      [System.IO.Compression.ZipFile]::ExtractToDirectory($zipFilePath, $destinationPath)
 
-      Write-Host "✅ Extracted contents directly into: $destinationPath"
+      # Get all .zip files in the current directory
+      $zipFiles = Get-ChildItem -Path $destinationPath -Filter "*.zip"
+
+      foreach ($zipFile in $zipFiles) {
+          Write-Host "Extracting: $($zipFile.FullName)"
+          [System.IO.Compression.ZipFile]::ExtractToDirectory($zipFile.FullName, $destinationPath, $true)
+      }
+
+      Write-Host "All zip files extracted to: $destinationPath"
 
 - task: QualysIaCSecurityConnector@2
   inputs:
