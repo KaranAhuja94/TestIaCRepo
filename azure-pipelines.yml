@@ -12,7 +12,20 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
- 
+
+- task: PowerShell@2
+  displayName: 'Extract Terraform ZIP to current dir'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $destinationPath = "$(Build.SourcesDirectory)"
+      $zipFilePath = Join-Path $destinationPath "terraform_10mb.zip"
+
+      Add-Type -AssemblyName System.IO.Compression.FileSystem
+      [System.IO.Compression.ZipFile]::ExtractToDirectory($zipFilePath, $destinationPath)
+
+      Write-Host "✅ Extracted contents directly into: $destinationPath"
+
 - task: QualysIaCSecurityConnector@2
   inputs:
     failByCriticalStatus: true
