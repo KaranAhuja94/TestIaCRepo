@@ -1,15 +1,15 @@
 name: Qualys CloudView IaC Security
-on:
-#workflow_dispatch
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: workflow_dispatch
+  #push:
+   # branches:
+    #  - main
+ # pull_request:
+  #  branches:
+   #   - main
 permissions:
   contents: read
   security-events: write
+  actions: read
 jobs:
     Qualys_iac_scan:
         runs-on: ubuntu-latest
