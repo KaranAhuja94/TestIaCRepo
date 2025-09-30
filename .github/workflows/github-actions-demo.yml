@@ -34,4 +34,4 @@ jobs:
             uses: github/codeql-action/upload-sarif@v3
             if: always()
             with:
-              sarif_file: response.sarif
+                  sarif_file: response.sarif
