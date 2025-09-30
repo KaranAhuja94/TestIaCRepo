@@ -27,8 +27,8 @@ jobs:
               URL: ${{ secrets.URL }}
               UNAME: ${{ secrets.USERNAME }}
               PASS: ${{ secrets.PASSWORD }}
-            with:
-              directory: .
+            #with:
+            #  directory: .
 
           - name: Upload SARIF file
             uses: github/codeql-action/upload-sarif@v3
