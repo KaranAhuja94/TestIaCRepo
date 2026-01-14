@@ -45,7 +45,9 @@ pipeline {
             cleanWs()
         }
         failure {
-            echo Qualys QIaC scan failed
+            steps {
+                echo 'Qualys QIaC scan failed'
+            }
         }
     }
 }
