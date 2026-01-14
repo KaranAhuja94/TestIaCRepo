@@ -23,20 +23,18 @@ pipeline {
             }
 
             steps {
-                sh '''
-                echo "Running Qualys QIaC scan via Docker CLI"
+                bat """
+                echo Running Qualys QIaC scan...
 
-                docker run --rm \
-                  -e QUALYS_URL \
-                  -e QUALYS_USERNAME \
-                  -e QUALYS_PASSWORD \
-                  -e HTTP_PROXY \
-                  -e HTTPS_PROXY \
-                  -v "$PWD:/work" \
-                  -w /work \
-                  qualys/qiac_security_cli \
-                  sh /home/qiac/iac_scan_launcher.sh false
-                '''
+                docker run --rm ^
+                  -e QUALYS_URL ^
+                  -e QUALYS_USERNAME ^
+                  -e QUALYS_PASSWORD ^
+                  -v "%CD%:/work" ^
+                  -w /work ^
+                  qualys/qiac_security_cli ^
+                  sh /home/qiac/iac_scan_launcher.sh ${scanWholeRepo}
+                """
             }
         }
     }
@@ -47,7 +45,7 @@ pipeline {
             cleanWs()
         }
         failure {
-            echo 'Qualys QIaC scan failed'
+            echo Qualys QIaC scan failed
         }
     }
 }
