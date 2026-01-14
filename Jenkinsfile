@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout the Code') {
             steps {
                 git branch: 'main',
-                    credentialsId: 'Github-Creds',
+                    credentialsId: 'GitHubCreds',
                     url: 'https://github.com/KaranAhuja94/TestIaCRepo/'
             }
         }
