@@ -2,20 +2,20 @@ def scanWholeRepo = false
 
 pipeline {
     agent any
+
     options {
         timestamps()
     }
 
     stages {
-        stage('Checkout the Code') {
+
+        stage('Checkout Source') {
             steps {
-                git branch: 'main',
-                    credentialsId: 'GitHubCreds',
-                    url: 'https://github.com/KaranAhuja94/TestIaCRepo/'
+                checkout scm
             }
         }
 
-        stage('Run QIaC Container') {
+        stage('Run Qualys QIaC Scan') {
             environment {
                 QUALYS_URL      = credentials('QUALYS_URL')
                 QUALYS_USERNAME = credentials('QUALYS_USERNAME')
@@ -23,22 +23,31 @@ pipeline {
             }
 
             steps {
-                script {
-                    docker.image('qualys/qiac_security_cli')
-                        .inside('--entrypoint=""') {
+                sh '''
+                echo "Running Qualys QIaC scan via Docker CLI"
 
-                        sh 'whoami'
-                        sh "sh /home/qiac/iac_scan_launcher.sh ${scanWholeRepo}"
-                    }
-                }
+                docker run --rm \
+                  -e QUALYS_URL \
+                  -e QUALYS_USERNAME \
+                  -e QUALYS_PASSWORD \
+                  -e HTTP_PROXY \
+                  -e HTTPS_PROXY \
+                  -v "$PWD:/work" \
+                  -w /work \
+                  qualys/qiac_security_cli \
+                  sh /home/qiac/iac_scan_launcher.sh false
+                '''
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: 'cli_output/**'
+            archiveArtifacts artifacts: '**/cli_output/**', allowEmptyArchive: true
             cleanWs()
+        }
+        failure {
+            echo 'Qualys QIaC scan failed'
         }
     }
 }
