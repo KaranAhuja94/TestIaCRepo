@@ -1,8 +1,9 @@
 def scanWholeRepo = false
 
 pipeline {
-    agent {
-        label 'vm198'
+    agent any
+    options {
+        timestamps()
     }
 
     stages {
