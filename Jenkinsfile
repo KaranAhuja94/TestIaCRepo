@@ -15,15 +15,6 @@ pipeline {
         }
 
         stage('Run QIaC Container') {
-            agent {
-                docker {
-                    image 'qualys/qiac_security_cli'
-                    args '--entrypoint=""'
-                    alwaysPull true
-                    reuseNode true
-                }
-            }
-
             environment {
                 QUALYS_URL      = credentials('QUALYS_URL')
                 QUALYS_USERNAME = credentials('QUALYS_USERNAME')
@@ -31,8 +22,14 @@ pipeline {
             }
 
             steps {
-                sh 'whoami'
-                sh "sh /home/qiac/iac_scan_launcher.sh ${scanWholeRepo}"
+                script {
+                    docker.image('qualys/qiac_security_cli')
+                        .inside('--entrypoint=""') {
+
+                        sh 'whoami'
+                        sh "sh /home/qiac/iac_scan_launcher.sh ${scanWholeRepo}"
+                    }
+                }
             }
         }
     }
