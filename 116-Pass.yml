@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudFormation template to create a standalone EC2 volume
+
+Resources:
+    DemoEBSVolume:
+      Type: AWS::EC2::Volume
+      Properties:
+          Encrypted: true

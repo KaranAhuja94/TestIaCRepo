@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {},
+  "functions": [],
+  "variables": {},
+  "resources": [{
+    "type": "Microsoft.KeyVault/vaults",
+    "apiVersion": "2016-06-01",
+    "name": "testkeyvault",
+    "location": "East US",
+    "properties":{
+        "accessPolicies":[{
+            "applicationId": "71945d2b-5878-44ea-aae3-d5abe951e23f",
+            "objectId": "5ea7224b-c88c-432f-b5a9-198ae1e60876",
+            "tenantId": "ff4e2413-65ab-4dc2-9e5b-1ea02d3d94eb",
+            "permissions":{
+                "certificates": "list",
+                "keys": "list",
+                "secrets": "list",
+                "storage": "list"
+            }
+        }],
+        "sku":{
+            "family": "A",
+            "name": "Standard"
+        },
+        "enablePurgeProtection":true,
+        "enableSoftDelete":true
+    }
+  }],
+  "outputs": {}
+}

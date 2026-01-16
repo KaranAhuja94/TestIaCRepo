@@ -1,0 +1,12 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "Template to create a KMS Key",
+	"Resources": {
+		"DemoKMSKey": {
+			"Type": "AWS::KMS::Key",
+			"Properties": {
+				"EnableKeyRotation": false
+			}
+		}
+	}
+}
