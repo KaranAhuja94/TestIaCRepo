@@ -5,6 +5,12 @@
 		"DemoKMSKey": {
 			"Type": "AWS::KMS::Key",
 			"Properties": {
+				"Tags": [
+				  {
+				    "Key": "yor_trace",
+				    "Value": "a4d3a7f2-671b-43c6-842f-a2f014978bd5"
+				  }
+				],
 				"EnableKeyRotation": false
 			}
 		}
