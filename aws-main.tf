@@ -19,6 +19,9 @@ provider "azurerm" {
 
 resource "aws_s3_bucket" "s3-logging-bucket" {
   bucket = "test-logging-bucket-15012026"
+  tags = {
+    yor_trace = "3f03ddf5-210a-4e14-b5b5-e1e40e234069"
+  }
 }
 
 resource "aws_s3_bucket" "test-s3-bucket" {
@@ -31,6 +34,9 @@ resource "aws_s3_bucket" "test-s3-bucket" {
   # control id 48 - Fail
   versioning {
     enabled = false
+  }
+  tags = {
+    yor_trace = "64a147ba-6560-4cd0-99ed-b719b646a0d2"
   }
 }
 
@@ -48,6 +54,9 @@ data "aws_iam_policy_document" "assume_role" {
 resource "aws_iam_role" "test-iam-role" {
   name               = "lambda-execution-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  tags = {
+    yor_trace = "db02d15d-0ba0-4f4a-a5ae-ddec5ed98de3"
+  }
 }
 
 resource "aws_lambda_function" "test-lambda-function" {
@@ -57,10 +66,16 @@ resource "aws_lambda_function" "test-lambda-function" {
   tracing_config {
     mode = "Active"
   }
+  tags = {
+    yor_trace = "89237d68-95c2-4582-9204-36ac5e7d6b51"
+  }
 }
 
 resource "aws_db_instance" "test-db-instance" {
   instance_class = "db.t3.micro"
   # control id 55 - Fail
   auto_minor_version_upgrade = false
+  tags = {
+    yor_trace = "c845c8a7-6574-43a3-9113-c2d4434a4594"
+  }
 }
