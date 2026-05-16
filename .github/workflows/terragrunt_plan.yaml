@@ -24,6 +24,11 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.0"
+
       - name: Setup Terragrunt
         uses: autero1/action-terragrunt@v3
         with:
