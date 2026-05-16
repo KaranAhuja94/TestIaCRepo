@@ -3,7 +3,7 @@ name: Qualys IaC Scan - Terragrunt Plan
 on:
   push:
     branches:
-      - main
+      - master
       - dev
     paths:
       - 'dev/**'
