@@ -44,9 +44,9 @@ jobs:
       - name: Run Qualys IaC Scan
         uses: Qualys/github_action_qiac@v1.0.2
         env:
-          URL: ${{ secrets.QUALYS_URL }}
-          UNAME: ${{ secrets.QUALYS_USERNAME }}
-          PASS: ${{ secrets.QUALYS_PASSWORD }}
+          URL: ${{ secrets.URL }}
+          UNAME: ${{ secrets.USERNAME }}
+          PASS: ${{ secrets.PASSWORD }}
           CURRENT_SHA: ${{ github.sha }}
         with:
           # Points to .terragrunt-cache - this will cause the "No files match" failure
